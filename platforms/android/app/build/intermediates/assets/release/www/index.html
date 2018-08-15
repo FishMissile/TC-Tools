@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" href="css/onsenui.css">
+    <link rel="stylesheet" href="css/onsen-css-components.css">
+    <script src="js/onsenui.min.js"></script>
+    <script src="js/workdays.js"></script>
+    <script src="js/runtime.js"></script>
+    <script src="js/pph.js"></script>
+    <script src="js/gramweight.js"></script>
+    <title>WorkApp</title>
+</head>
+
+<body>
+
+    </head>
+
+    <body>
+        <ons-page>
+            <ons-toolbar>
+                <div class="center" id="toolbar-title">Work Days</div>
+            </ons-toolbar>
+            <ons-tabbar position="top" swipeable>
+                <ons-tab label="WorkDays" page="workdays.html" active>
+                </ons-tab>
+                <ons-tab label="PPH" page="pph.html">
+                </ons-tab>
+                <ons-tab label="RUNTIME" page="runtime.html">
+                </ons-tab>
+                <ons-tab label="GRAMWEIGHT" page="gramweight.html">
+                </ons-tab>
+            </ons-tabbar>
+        </ons-page>
+
+        <ons-template id="workdays.html">
+            <ons-page id="first-page">
+
+                <p style="text-align: center;margin-top: 25%;">
+                    <center>
+                        <table id="tblForm" border="0" cellpadding="5" cellspacing="0">
+                            <tr>
+                                <td>Input Date:</td>
+                                <td>
+                                    <ons-input max="10" size="10" class="text-input text-input--material" type="text" id="inputDate" name="inputDate" required></ons-input>
+                                    <br>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <br>
+                        <button class="button" onclick="DayOff()">Calculate</button>
+                        <tr>
+                            <br>
+                            <p id="workdays1">Format must be mm/dd/yyyy ex: 05/23/2024</p>
+                        </tr>
+                        <p id="workdays2"></p>
+                    </center>
+                </p>
+
+
+
+
+            </ons-page>
+        </ons-template>
+
+        <ons-template id="pph.html">
+            <ons-page id="second-page">
+                    <p style="text-align: center;margin-top: 25%;">
+
+
+                    <center>
+                        <form id="input" action="/action_page.php">
+                            Width:
+                            <ons-input max="6" size="6" class="text-input text-input--material" type="number" id="pphwidth" name="pphwidth"></ons-input>
+                            <br> Guage:
+                            <ons-input max="4" size="6" class="text-input text-input--material" type="number" id="pphguage" name="pphguage"></ons-input>
+                            <br> RPM:
+                            <ons-input max="4" size="6" class="text-input text-input--material" type="number" id="rpm" name="RPM"></ons-input>
+                            <br>
+                        </form>
+                        <br>
+                        <button class="button" onclick="PPh()">PPh</button>
+                        <br>
+                        <tr>
+                            <p id="pphresult"></p>
+                        </tr>
+                    </center>
+
+
+                </p>
+            </ons-page>
+        </ons-template>
+
+        <ons-template id="runtime.html">
+            <ons-page id="third-page">
+
+
+                    <p style="text-align: center;margin-top: 15%;">
+                            <center>
+                        <form id="input">
+                            &nbsp;
+                            <table style="width: 369px">
+                                    <tr>
+                                            <td class="auto-style1" align="right" style="width: 50%">Order total: </td>
+                                            <td style="width: 50%">
+                                                <ons-input max="10" size="10"  class="text-input text-input--material" type="number" id="orderTotal" name="orderTotal"></ons-input>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="auto-style1" align="right" style="width: 50%">Pounds Ran: </td>
+                                            <td style="width: 50%">
+                                                <ons-input max="4" size="4" oninput="GetPoundsLeft()" class="text-input text-input--material" type="number" id="poundsRan" name="poundsRan"></ons-input>
+                                            </td>
+                                        </tr>
+                                <tr>
+                                    <td class="auto-style1" align="right" style="width: 50%">Remaining Pounds:</td>
+                                    <td style="width: 50%">
+                                        <ons-input max="10" size="10"  class="text-input text-input--material" type="number" id="poundsLeft" name="poundsLeft"></ons-input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="auto-style1" align="right" style="width: 50%">pph: </td>
+                                    <td style="width: 50%">
+                                        <ons-input max="4" size="4" class="text-input text-input--material" type="number" id="pph" name="pph"></ons-input>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </form>
+                        <br>
+                        <button class="button" onclick="Remaining()">Calculate</button>
+                        <tr>
+                            <p id="Runtime1"></p>
+                        </tr>
+
+                        <p id="Runtime2"></p>
+                        </tr>
+
+                        <p id="Runtime3"></p>
+                        </tr>
+
+                    </center>
+                </p>
+
+
+            </ons-page>
+        </ons-template>
+
+        <ons-template id="gramweight.html">
+            <ons-page id="fourth-page">
+                    <p style="text-align: center;margin-top: 25%;">
+
+                    <center>
+                        <form id="input" action="/action_page.php">
+                            Width:
+                            <ons-input max="6" size="6" class="text-input text-input--material" type="number" id="widthv" name="widthv"></ons-input>
+                            <br> Guage:
+                            <ons-input max="6" size="6" class="text-input text-input--material" type="number" id="guagev" name="guagev"></ons-input>
+                            <br> Density:
+                            <ons-input max="6" size="6" class="text-input text-input--material" type="number" id="densityv" name="densityv"></ons-input>
+                            <br>
+                        </form>
+                        <br>
+                        <button class="button" onclick="gramWeight()">G/m</button>
+                        <br>
+                        <p id="gramweight"></p>
+                    </center>
+
+
+                </p>
+            </ons-page>
+        </ons-template>
+
+    </body>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+</html>
